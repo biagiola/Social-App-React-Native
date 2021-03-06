@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import SignupScreen from '../screens/SignupScreen'
 import LoginScreen from '../screens/LoginScreen'
@@ -16,14 +16,14 @@ const AuthStack = () => {
   let routeName;
 
   useEffect(() => {
-     AsyncStorage.getItem('alreadyLaunched').then(value => {
-       if(value == null) {
-         AsyncStorage.setItem('alreadyLaunched', 'true')
-         setIsFirstLaunch(true)
-       } else {
-         setIsFirstLaunch(false)
-       }
-     })
+    AsyncStorage.getItem('alreadyLaunched').then(value => {
+      if(value == null) {
+        AsyncStorage.setItem('alreadyLaunched', 'true')
+        setIsFirstLaunch(true)
+      } else {
+        setIsFirstLaunch(false)
+      }
+    })
   }, [])
 
   if( isFirstLaunch == null ) {
