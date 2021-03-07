@@ -19,7 +19,7 @@ import firestore from '@react-native-firebase/firestore'
 
 import {Container} from '../styles/FeedStyles'
 
-const Posts = [
+/* const Posts = [
   {
     id: '1',
     userName: 'Jenny Doe',
@@ -80,13 +80,13 @@ const Posts = [
     likes: '0',
     comments: '0',
   },
-];
+]; */
 
 const HomeScreen = ({ navigation }) => {
   const [posts, setPosts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [deleted, setDeleted] = useState(false)
-  const [state, setstate] = useState(initialState)
+  const [newPostComming, setNewPostComming] = useState(false)
 
   const fetchPosts = async () => {
     try {
@@ -148,13 +148,16 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     firestore()
-    .collection('posts')
-    //.doc()
-    .onSnapshot( () => {
-        console.log("Current data: ");
-    });
+      .collection('posts')
+      .onSnapshot((querySnapshot) => {
+        console.log('new data is comming', querySnapshot.size)
+        fetchPosts()
+      })
     
-  }, [])
+    return function cleanup() {
+      clearInterval(posts)
+    }
+  }, [setPosts])
 
   const handleDelete = postId => {
     Alert.alert(
@@ -233,7 +236,7 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView style={{flex: 1}}>
       {loading ? (
         <ScrollView
-          style={{flex: 1}}
+          /* style={{flex: 1}} */
           contentContainerStyle={{alignItems: 'center'}}>
           <SkeletonPlaceholder highlightColor={'#eff3f6'} speed={900}>
             <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 10}}>

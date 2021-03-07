@@ -26,8 +26,6 @@ import {
 import { AuthContext } from '../navigation/AuthProvider'
 
 const AddPostScreen = ({ navigation }) => {
-  console.log('navigation', navigation)
-
   const { user, logout } = useContext(AuthContext)
 
   const [image, setImage] = useState(null)
@@ -76,10 +74,10 @@ const AddPostScreen = ({ navigation }) => {
     })
     .then(() => {
       console.log('Post Added!')
-      Alert.alert(
+      /* Alert.alert(
         'Post published!',
         'Your post has been published Successfully'
-      )
+      ) */
       setPost(null)
 
       navigation.navigate('Social App')
