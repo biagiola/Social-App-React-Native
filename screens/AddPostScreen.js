@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  ToastAndroid
 } from 'react-native'
 import ActionButton from 'react-native-action-button'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -24,7 +25,7 @@ import {
 } from '../styles/AddPost';
 
 import { AuthContext } from '../navigation/AuthProvider'
-import { ToastAndroid } from 'react-native'
+
 
 const AddPostScreen = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext)
@@ -68,8 +69,8 @@ const AddPostScreen = ({ navigation }) => {
       post: post,
       postImg: imageUri,
       postTime: firestore.Timestamp.fromDate(new Date()),
-      likes: 1,
-      liked: true,
+      likes: 0,
+      liked: false,
       comments: null
     })
     .then(() => {
@@ -85,9 +86,9 @@ const AddPostScreen = ({ navigation }) => {
         ToastAndroid.BOTTOM,
         25,
         50
-      );
+      )
     })
-    .catch((error) => {
+    .catch(error => {
       console.log('Something went wrong with added post to firestore.', error)
     })
   }

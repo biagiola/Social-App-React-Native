@@ -7,6 +7,7 @@ import {
   FlatList,
   SafeAreaView,
   Alert,
+  ToastAndroid
 } from 'react-native'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 
@@ -16,7 +17,6 @@ import PostCard from '../components/PostCard'
 
 import storage from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'
-
 
 
 import {Container} from '../styles/FeedStyles'
@@ -223,13 +223,17 @@ const HomeScreen = ({ navigation }) => {
       .doc(postId)
       .delete()
       .then(() => {
-        Alert.alert(
-          'Post deleted!',
-          'Your post has been deleted successfully!'
-        )
         setDeleted(true)
+
+        ToastAndroid.showWithGravityAndOffset(
+          "Message Deleted",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          25,
+          50
+        )
       })
-      .catch((e) => console.log('Error deleting post. ', e))
+      .catch(e => console.log('Error deleting post. ', e))
   }
 
   const ListHeader = () => {
@@ -285,6 +289,8 @@ const HomeScreen = ({ navigation }) => {
         </ScrollView>
       ) : (
         <Container>
+
+
           <FlatList
             keyExtractor={item => item.id}
             data={posts}
