@@ -17,6 +17,8 @@ import PostCard from '../components/PostCard'
 import storage from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'
 
+
+
 import {Container} from '../styles/FeedStyles'
 
 /* const Posts = [
@@ -107,6 +109,7 @@ const HomeScreen = ({ navigation }) => {
               postImg,
               postTime,
               likes,
+              liked,
               comments,
             } = doc.data();
             list.push({
@@ -118,7 +121,7 @@ const HomeScreen = ({ navigation }) => {
               postTime: postTime.seconds,
               post,
               postImg,
-              liked: false,
+              liked,
               likes,
               comments,
             })

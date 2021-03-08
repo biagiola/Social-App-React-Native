@@ -24,6 +24,7 @@ import {
 } from '../styles/AddPost';
 
 import { AuthContext } from '../navigation/AuthProvider'
+import { ToastAndroid } from 'react-native'
 
 const AddPostScreen = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext)
@@ -59,8 +60,6 @@ const AddPostScreen = ({ navigation }) => {
 
   const submitPost = async () => {
     const imageUri = await uploadImage()
-    console.log('Image Url', imageUri)
-    console.log('Post: ', post)
 
     firestore()
     .collection('posts')
@@ -69,18 +68,24 @@ const AddPostScreen = ({ navigation }) => {
       post: post,
       postImg: imageUri,
       postTime: firestore.Timestamp.fromDate(new Date()),
-      likes: null,
+      likes: 1,
+      liked: true,
       comments: null
     })
     .then(() => {
       console.log('Post Added!')
-      /* Alert.alert(
-        'Post published!',
-        'Your post has been published Successfully'
-      ) */
-      setPost(null)
 
+      setPost(null)
+      
       navigation.navigate('Social App')
+
+      ToastAndroid.showWithGravityAndOffset(
+        "Message Added",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+      );
     })
     .catch((error) => {
       console.log('Something went wrong with added post to firestore.', error)
@@ -125,11 +130,6 @@ const AddPostScreen = ({ navigation }) => {
       setUploading(false)
       setImage(null)
 
-      Alert.alert(
-        'Image uploaded!',
-        'Your image has been uploaded to the Firebase Cloud Storage Successfully!',
-      )
-
       return url
 
     } catch (error) {
@@ -162,15 +162,16 @@ const AddPostScreen = ({ navigation }) => {
         )}
       </InputWrapper>
       
-      <ActionButton buttonColor='#2e64e5'>
+      <ActionButton btnOutRange={'orange'} /* fixNativeFeedbackRadius={true}  */buttonColor='rgb(46, 100, 229)'>
         <ActionButton.Item
-          buttonColor='#9b59b6'
+          buttonColor='rgb(155, 89, 182)'
           title='Take Photo'
+          
           onPress={takePhotoFromCamera}>
           <Icon name='camera-outline' style={styles.actionButtonIcon} />
         </ActionButton.Item>
         <ActionButton.Item
-          buttonColor='#3498db'
+          buttonColor='rgb(52, 152, 219)'
           title='Choose Photo'
           onPress={choosePhotoFromLibrary}>
           <Icon name='md-images-outline' style={styles.actionButtonIcon} />
@@ -197,5 +198,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 22,
     color: 'white',
-  },
+    backgroundColor: 'transparent'
+  }
 })

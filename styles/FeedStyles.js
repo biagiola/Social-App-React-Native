@@ -9,7 +9,7 @@ export const Container = styled.View`
 
 export const Card = styled.View`
   background-color: #f8f8f8;
-  width: 100%;
+  width: ${props => props.width }${'px'};
   margin-bottom: 20px;
   border-radius: 10px;
 `;

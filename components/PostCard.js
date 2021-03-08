@@ -30,10 +30,10 @@ const PostCard = ({item, onDelete , onPress}) => {
   const { user, logout } = useContext(AuthContext)
   const [userData, setUserData] = useState(null)
 
-  const window = Dimensions.get('window')
-  
-  let d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-  d.setUTCSeconds(item.postTime);
+  const windowWidth = Dimensions.get('window').width
+
+  let date = new Date(0); // The 0 there is the key, which sets the date to the epoch
+  date.setUTCSeconds(item.postTime);
 
   likeIcon = item.liked ? 'heart' : 'heart-outline'
   likeIconColor = item.liked ? '#2e64e5' : '#333'
@@ -72,7 +72,7 @@ const PostCard = ({item, onDelete , onPress}) => {
   }, [])
 
   return (
-    <Card key={item.id}>
+    <Card key={item.id} width={windowWidth}>
       <UserInfo>
         {/* <UserImg
           source={{
@@ -91,7 +91,7 @@ const PostCard = ({item, onDelete , onPress}) => {
             </UserName>
           </TouchableOpacity>
           
-          <PostTime>{moment(d).fromNow()}</PostTime>
+          <PostTime>{moment(date).fromNow()}</PostTime>
         </UserInfoText>
       </UserInfo>
       <PostText>{item.post}</PostText>
@@ -101,7 +101,7 @@ const PostCard = ({item, onDelete , onPress}) => {
          <ProgressiveImage
           defaultImageSource={require('../assets/default-img.jpg')}
           source={{uri: item.postImg}}
-          style={{width: window.width, height: 250}}
+          style={{width: windowWidth, height: 250}}
           resizeMode="cover"
          />
       ) : (
@@ -129,3 +129,4 @@ const PostCard = ({item, onDelete , onPress}) => {
 }
 
 export default PostCard
+
