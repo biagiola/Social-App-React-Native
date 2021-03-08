@@ -86,7 +86,6 @@ const HomeScreen = ({ navigation }) => {
   const [posts, setPosts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [deleted, setDeleted] = useState(false)
-  const [newPostComming, setNewPostComming] = useState(false)
 
   const fetchPosts = async () => {
     try {
@@ -137,20 +136,22 @@ const HomeScreen = ({ navigation }) => {
     }
   }
 
+  // first render
   useEffect(() => {
     fetchPosts()
   }, [])
 
+  // after delete a post
   useEffect(() => {
     fetchPosts()
     setDeleted(false)
   }, [deleted])
 
+  // after added a post
   useEffect(() => {
     firestore()
       .collection('posts')
-      .onSnapshot((querySnapshot) => {
-        console.log('new data is comming', querySnapshot.size)
+      .onSnapshot(() => {
         fetchPosts()
       })
     
@@ -234,9 +235,9 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {loading ? (
+      { loading ? (
         <ScrollView
-          /* style={{flex: 1}} */
+          style={{flex: 1}}
           contentContainerStyle={{alignItems: 'center'}}>
           <SkeletonPlaceholder highlightColor={'#eff3f6'} speed={900}>
             <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 10}}>
@@ -298,7 +299,7 @@ const HomeScreen = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
           />
         </Container>
-      )}
+      )} 
     </SafeAreaView>
   )
 }

@@ -8,11 +8,15 @@
 
 import React from 'react'
 import Providers from './navigation/Index'
-
-//const AppStack = createStackNavigator()
+// this is for the extra padding top generated for SafeViewAre Iphone X
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App: () => React$Node = () => {
-  return <Providers />
+  return (
+    <SafeAreaProvider>
+      <Providers />
+    </SafeAreaProvider>
+  )
 }
 
 export default App

@@ -17,7 +17,7 @@ import EditProfileScreen from '../screens/EditProfileScreen'
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const FeedStack = ({navigation}) => (
+const FeedStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Social App"
@@ -31,7 +31,7 @@ const FeedStack = ({navigation}) => (
         },
         headerStyle: {
           shadowColor: '#fff',
-          elevation: 0,
+          elevation: 2,
         },
         headerRight: () => (
           <View style={{marginRight: 10}}>
