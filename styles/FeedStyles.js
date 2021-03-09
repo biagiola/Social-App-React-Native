@@ -16,8 +16,17 @@ export const Card = styled.View`
 
 export const UserInfo = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 15px;
+`;
+
+export const UserInfoLeft = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+`;
+
+export const UserInfoRight = styled.View`
+  margin-top: 8px;
 `;
 
 export const UserImg = styled.Image`
@@ -41,7 +50,7 @@ export const UserName = styled.Text`
 export const PostTime = styled.Text`
   font-size: 12px;
   font-family: 'Lato-Regular';
-  color: #666;
+  color: #262626;
 `;
 
 export const PostText = styled.Text`
@@ -50,6 +59,15 @@ export const PostText = styled.Text`
   padding-left: 15px;
   padding-right: 15px;
   margin-bottom: 15px;
+`;
+
+export const DeleteItemIcon = styled.View`
+  padding: 2px;
+  padding-right: 8px;
+`;
+
+export const DeleteItemText = styled.View`
+  padding: 2px;
 `;
 
 export const PostImg = styled.Image`

@@ -289,8 +289,6 @@ const HomeScreen = ({ navigation }) => {
         </ScrollView>
       ) : (
         <Container>
-
-
           <FlatList
             keyExtractor={item => item.id}
             data={posts}
