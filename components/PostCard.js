@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Dimensions } from 'react-native'
+import React, { useContext, useEffect, useState, useRef } from 'react'
+import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {
-  Container,
   Card,
   UserInfo,
   UserInfoLeft,
@@ -87,11 +86,23 @@ const PostCard = ({item, onDelete , onPress}) => {
       })
   }
 
+  const fadeAnim = useRef(new Animated.Value(0)).current
+
   useEffect(() => {
     getUser()
+    
+    Animated.timing(fadeAnim, {
+      toValue: 10,
+      duration: 1000,
+      useNativeDriver: true
+    }).start()
+
   }, [])
 
   return (
+    <Animated.View
+      style={{ opacity: fadeAnim  }}// Bind opacity to animated value
+    >
     <Card key={item.id} width={windowWidth}>
       {/* Post Header */}
       <UserInfo>
@@ -170,6 +181,7 @@ const PostCard = ({item, onDelete , onPress}) => {
       </InteractionWrapper>
 
     </Card>
+    </Animated.View>
   )
 }
 

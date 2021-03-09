@@ -10,7 +10,6 @@ import {
   ToastAndroid
 } from 'react-native'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import PostCard from '../components/PostCard'
