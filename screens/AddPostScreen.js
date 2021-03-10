@@ -4,7 +4,6 @@ import {
   Text,
   Platform,
   StyleSheet,
-  Alert,
   ActivityIndicator,
   ToastAndroid
 } from 'react-native'

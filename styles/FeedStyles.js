@@ -58,15 +58,17 @@ export const PostText = styled.Text`
   font-family: 'Lato-Regular';
   padding-left: 15px;
   padding-right: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-left: 0px
 `;
 
-export const DeleteItemIcon = styled.View`
+export const MenuItemIcon = styled.View`
   padding: 2px;
   padding-right: 8px;
 `;
 
-export const DeleteItemText = styled.View`
+export const MenuItemText = styled.View`
   padding: 2px;
 `;
 

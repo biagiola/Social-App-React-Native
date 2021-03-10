@@ -87,6 +87,7 @@ const HomeScreen = ({ navigation }) => {
   const [posts, setPosts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [deleted, setDeleted] = useState(false)
+  const [postEditedText, setpostEditedText] = useState('')
 
   const fetchPosts = async () => {
     try {
@@ -290,11 +291,12 @@ const HomeScreen = ({ navigation }) => {
         <Container>
           <FlatList
             keyExtractor={item => item.id}
+            keyboardShouldPersistTaps='always'
             data={posts}
             renderItem={ ({item}) => (
               <PostCard
                 item={item}
-                onDelete={(postId) => handleDelete(postId)}
+                onDelete={postId => handleDelete(postId)}
                 onPress={() =>
                   navigation.navigate('HomeProfile', {userId: item.userId})
                 }

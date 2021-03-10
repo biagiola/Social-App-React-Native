@@ -31,11 +31,13 @@
     "react-native-image-crop-picker": "^0.36.0",
     "react-native-material-menu": "^1.2.0",
     "react-native-onboarding-swiper": "^1.1.4",
+    "react-native-reanimated": "^2.0.0",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.1",
     "react-native-skeleton-placeholder": "^3.0.4",
     "react-native-vector-icons": "^8.1.0",
     "react-native-webview": "^11.2.3",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

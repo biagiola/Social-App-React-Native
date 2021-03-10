@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react'
 import {
   View,
   Text,
@@ -8,31 +8,30 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import FormButton from '../components/FormButton';
-import {AuthContext} from '../navigation/AuthProvider';
+import FormButton from '../components/FormButton'
+import { AuthContext } from '../navigation/AuthProvider'
 
-import firestore from '@react-native-firebase/firestore';
-import PostCard from '../components/PostCard';
+import firestore from '@react-native-firebase/firestore'
+import PostCard from '../components/PostCard'
 
-const ProfileScreen = ({navigation, route}) => {
-  const {user, logout} = useContext(AuthContext);
+const ProfileScreen = ({ navigation, route }) => {
+  const { user, logout } = useContext(AuthContext)
+  
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [deleted, setDeleted] = useState(false)
+  const [userData, setUserData] = useState(null)
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [deleted, setDeleted] = useState(false);
-  const [userData, setUserData] = useState(null);
-
-  /* const fetchPosts = async () => {
+  const fetchPosts = async () => {
     try {
-      const list = [];
+      const list = []
 
       await firestore()
         .collection('posts')
         .where('userId', '==', route.params ? route.params.userId : user.uid)
         .orderBy('postTime', 'desc')
         .get()
-        .then((querySnapshot) => {
-          // console.log('Total Posts: ', querySnapshot.size);
+        .then(querySnapshot => {
 
           querySnapshot.forEach((doc) => {
             const {
@@ -42,7 +41,7 @@ const ProfileScreen = ({navigation, route}) => {
               postTime,
               likes,
               comments,
-            } = doc.data();
+            } = doc.data()
             list.push({
               id: doc.id,
               userId,
@@ -55,42 +54,44 @@ const ProfileScreen = ({navigation, route}) => {
               liked: false,
               likes,
               comments,
-            });
-          });
-        });
+            })
+          })
+        })
 
-      setPosts(list);
+      setPosts(list)
 
       if (loading) {
-        setLoading(false);
+        setLoading(false)
       }
 
       console.log('Posts: ', posts);
     } catch (e) {
       console.log(e);
     }
-  }; */
+  }
 
-  /* const getUser = async() => {
+  const getUser = async() => {
     await firestore()
     .collection('users')
     .doc( route.params ? route.params.userId : user.uid)
     .get()
     .then((documentSnapshot) => {
       if( documentSnapshot.exists ) {
-        console.log('User Data', documentSnapshot.data());
-        setUserData(documentSnapshot.data());
+        console.log('User Data', documentSnapshot.data())
+        setUserData(documentSnapshot.data())
       }
     })
   }
- */
-  useEffect(() => {
-    //getUser();
-    //fetchPosts();
-    navigation.addListener("focus", () => setLoading(!loading));
-  }, [navigation, loading]);
 
-  const handleDelete = () => {};
+  useEffect(() => {
+    getUser()
+    fetchPosts()
+    navigation.addListener("focus", () => setLoading(!loading))
+  }, [navigation, loading])
+
+  const handleDelete = () => {
+    console.log('this is handleDelete')
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -103,6 +104,7 @@ const ProfileScreen = ({navigation, route}) => {
           source={{uri: userData ? userData.userImg || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'}}
         />
         <Text style={styles.userName}>{userData ? userData.fname || 'Test' : 'Test'} {userData ? userData.lname || 'User' : 'User'}</Text>
+        <Text>{ route.params ? route.params.userId : user.uid }</Text>
         {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
         <Text style={styles.aboutUser}>
         {userData ? userData.about || 'No details added.' : ''}
@@ -121,9 +123,7 @@ const ProfileScreen = ({navigation, route}) => {
             <>
               <TouchableOpacity
                 style={styles.userBtn}
-                onPress={() => {
-                  navigation.navigate('EditProfile');
-                }}>
+                onPress={ () => { navigation.navigate('EditProfile')} }>
                 <Text style={styles.userBtnTxt}>Edit</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.userBtn} onPress={() => logout()}>
@@ -153,16 +153,16 @@ const ProfileScreen = ({navigation, route}) => {
         ))}
       </ScrollView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default ProfileScreen;
+export default ProfileScreen
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
+    paddingTop: 20
   },
   userImg: {
     height: 150,
@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
   },
-});
+})

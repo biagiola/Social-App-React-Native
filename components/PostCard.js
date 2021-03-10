@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native'
+import { View, Text, Dimensions, Animated, TextInput, Button } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {
   Card,
@@ -11,8 +11,8 @@ import {
   UserInfoText,
   PostTime,
   PostText,
-  DeleteItemIcon,
-  DeleteItemText,
+  MenuItemIcon,
+  MenuItemText,
   PostImg,
   InteractionWrapper,
   Interaction,
@@ -30,10 +30,12 @@ import { AuthContext } from '../navigation/AuthProvider'
 import firestore from '@react-native-firebase/firestore'
 import Menu, { MenuItem } from 'react-native-material-menu'
 
-const PostCard = ({item, onDelete , onPress}) => {
+const PostCard = ({item, onDelete, onPress}) => {
   const { user, logout } = useContext(AuthContext)
   const [userData, setUserData] = useState(null)
   const windowWidth = Dimensions.get('window').width
+  const [editPostBox, setEditPostBox] = useState(false)
+  const [textPostEdited, setTextPostEdited] = useState(item.post)
 
   /* menu stuffs */
   let menu = null
@@ -86,8 +88,8 @@ const PostCard = ({item, onDelete , onPress}) => {
       })
   }
 
+  /* animations's cards */
   const fadeAnim = useRef(new Animated.Value(0)).current
-
   useEffect(() => {
     getUser()
     
@@ -99,11 +101,46 @@ const PostCard = ({item, onDelete , onPress}) => {
 
   }, [])
 
+  /* animations's buttons */
+  const fadeAnimBtn = useRef(new Animated.Value(0)).current
+  useEffect(() => {
+    getUser()
+    
+    Animated.timing(fadeAnimBtn, {
+      toValue: 10,
+      duration: 1000,
+      useNativeDriver: true
+    }).start()
+
+  }, [editPostBox])
+
+  const onEdit = () => {
+    setEditPostBox(!editPostBox)
+    hideMenu()
+  }
+
+  const editPost = async() => {
+    try {
+      await firestore()
+      .collection('posts')
+      .doc(item.id)
+      .update({
+        post: textPostEdited,
+      })
+
+      setEditPostBox(!editPostBox)
+      console.log('Update success!', textPostEdited)
+
+    } catch (error) {
+      console.log('Error', error)
+    }
+  }
+
   return (
     <Animated.View
-      style={{ opacity: fadeAnim  }}// Bind opacity to animated value
+      style={{ opacity: fadeAnim  }} // Bind opacity to animated value
     >
-    <Card key={item.id} width={windowWidth}>
+    <Card key={item.id} width={windowWidth} >
       {/* Post Header */}
       <UserInfo>
         {/* <UserImg
@@ -132,7 +169,7 @@ const PostCard = ({item, onDelete , onPress}) => {
           <Menu
             ref={setMenuRef}
             button={
-              <View /* style={styles.moreVerticalButton} */> 
+              <View> 
                 <Text onPress={showMenu}>
                 <Ionicons name="ellipsis-horizontal" size={20}/>
                 </Text>  
@@ -141,12 +178,21 @@ const PostCard = ({item, onDelete , onPress}) => {
           >
             {/* delete item */}
             <MenuItem onPress={() => onDelete(item.id)}>
-              <DeleteItemIcon>
+              <MenuItemIcon>
                 <AntDesign name='delete' size={17} color="#111" />
-              </DeleteItemIcon>
-              <DeleteItemText>
+              </MenuItemIcon>
+              <MenuItemText>
                 <Text>Delete</Text>
-              </DeleteItemText>
+              </MenuItemText>
+            </MenuItem>
+            {/* edit item */}
+            <MenuItem onPress={onEdit}>
+              <MenuItemIcon>
+                <AntDesign name='edit' size={17} color="#111" />
+              </MenuItemIcon>
+              <MenuItemText>
+                <Text>Edit</Text>
+              </MenuItemText>
             </MenuItem>
           </Menu>
         </UserInfoRight>
@@ -154,7 +200,32 @@ const PostCard = ({item, onDelete , onPress}) => {
       </UserInfo>
 
       {/* Posts data */}
-      <PostText>{item.post}</PostText>
+      {editPostBox ? 
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
+          <TextInput 
+            type="text" 
+            autoFocus={true}
+            value={textPostEdited}
+            onChangeText={val => setTextPostEdited(val)} 
+            style={{ borderBottomWidth: 0, marginLeft: 10 }} 
+          />
+          {/* Buttons */}
+          <Animated.View style={{ opacity: fadeAnimBtn  }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              {/* Edit */}
+              <View style={{ marginRight: 10 }}>
+                <Button title='edit' onPress={editPost} />
+              </View>
+              {/* Button */}
+              <View>
+                <Button title='cancel' onPress={onEdit }/>
+              </View>
+            </View>
+          </Animated.View>
+        </View>
+        :
+        <PostText>{textPostEdited}</PostText>}
+      
       {/* { item.postImg !== null ? <PostImg source={{ uri: item.postImg }} /> : <Divider /> } */}
       {/* {item.postImg != null ? <PostImg source={{uri: item.postImg}} /> : <Divider />} */}
       {item.postImg != null ? (

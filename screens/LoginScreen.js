@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.logo}
       />
 
-      <Text style={styles.text}>sSocial App</Text>
+      <Text style={styles.text}>Social App</Text>
 
       <FormInput 
         labelValue={email}
