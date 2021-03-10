@@ -82,19 +82,6 @@ const PostCard = ({item, onDelete, onPress, route}) => {
     commentText = 'Comment'
   }
 
-  const getUser = async () => {
-    await firestore()
-      .collection('users')
-      .doc(item.userId)
-      .get()
-      .then((documentSnapshot) => {
-        if(documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data())
-          setUserData(documentSnapshot.data())
-        } 
-      })
-  }
-
   /* animations's cards */
   const fadeAnim = useRef(new Animated.Value(0)).current
   useEffect(() => {
@@ -107,19 +94,6 @@ const PostCard = ({item, onDelete, onPress, route}) => {
     }).start()
 
   }, [])
-
-  /* animations's buttons */
-  const fadeAnimBtn = useRef(new Animated.Value(0)).current
-  useEffect(() => {
-    getUser()
-    
-    Animated.timing(fadeAnimBtn, {
-      toValue: 10,
-      duration: 1000,
-      useNativeDriver: true
-    }).start()
-
-  }, [editPostBox])
 
   const onEdit = () => {
     setEditPostBox(!editPostBox)
@@ -143,6 +117,19 @@ const PostCard = ({item, onDelete, onPress, route}) => {
     }
   }
 
+  const getUser = async () => {
+    await firestore()
+      .collection('users')
+      .doc(item.userId)
+      .get()
+      .then((documentSnapshot) => {
+        if(documentSnapshot.exists) {
+          console.log('User Data', documentSnapshot.data())
+          setUserData(documentSnapshot.data())
+        } 
+      })
+  }
+
   return (
     <Animated.View
       style={{ opacity: fadeAnim  }} // Bind opacity to animated value
@@ -150,16 +137,16 @@ const PostCard = ({item, onDelete, onPress, route}) => {
     <Card key={item.id} width={windowWidth} >
       {/* Post Header */}
       <UserInfo>
-        {/* <UserImg
-          source={{
-            uri: userData
-              ? userData.userImg ||
-                'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
-              : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
-          }}
-        /> */}
         <UserInfoLeft>
-          <UserImg source={{ uri: item.userImg }} />
+          {/* <UserImg source={{ uri: item.userImg }} /> */}
+          <UserImg
+            source={{
+              uri: userData
+                ? userData.userImg ||
+                  'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
+                : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
+            }}
+          />
           <UserInfoText>
             <TouchableOpacity onPress={onPress}>
               <UserName>
