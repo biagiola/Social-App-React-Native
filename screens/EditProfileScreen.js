@@ -121,7 +121,7 @@ const EditProfileScreen = () => {
       return null
     }
 
-  };
+  }
 
   useEffect(() => {
     getUser()
@@ -220,8 +220,7 @@ const EditProfileScreen = () => {
               <ImageBackground
                 source={{
                   uri: image
-                    ? image
-                    : userData
+                    ? image : userData
                     ? userData.userImg ||
                       'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
                     : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',

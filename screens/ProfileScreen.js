@@ -14,7 +14,7 @@ import { AuthContext } from '../navigation/AuthProvider'
 import firestore from '@react-native-firebase/firestore'
 import PostCard from '../components/PostCard'
 
-const ProfileScreen = ({ navigation, route }) => {
+const ProfileScreen = ({navigation, route}) => {
   const { user, logout } = useContext(AuthContext)
   
   const [posts, setPosts] = useState([])
@@ -22,18 +22,21 @@ const ProfileScreen = ({ navigation, route }) => {
   const [deleted, setDeleted] = useState(false)
   const [userData, setUserData] = useState(null)
 
+  console.log('user', user.uid, route)
+
   const fetchPosts = async () => {
     try {
       const list = []
 
       await firestore()
         .collection('posts')
-        .where('userId', '==', route.params ? route.params.userId : user.uid)
+        .where('userId', '==', route.params ? route.params.userId :  user.uid)
         .orderBy('postTime', 'desc')
         .get()
         .then(querySnapshot => {
+          console.log('Total Posts: ', querySnapshot.size);
 
-          querySnapshot.forEach((doc) => {
+          querySnapshot.forEach(doc => {
             const {
               userId,
               post,
@@ -57,6 +60,8 @@ const ProfileScreen = ({ navigation, route }) => {
             })
           })
         })
+
+      console.log('list', list)
 
       setPosts(list)
 
@@ -101,7 +106,11 @@ const ProfileScreen = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}>
         <Image
           style={styles.userImg}
-          source={{uri: userData ? userData.userImg || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'}}
+          source={{uri: 
+            userData ? 
+              userData.userImg || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' 
+              : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
+            }}
         />
         <Text style={styles.userName}>{userData ? userData.fname || 'Test' : 'Test'} {userData ? userData.lname || 'User' : 'User'}</Text>
         <Text>{ route.params ? route.params.userId : user.uid }</Text>
@@ -149,7 +158,7 @@ const ProfileScreen = ({ navigation, route }) => {
         </View>
 
         {posts.map((item) => (
-          <PostCard key={item.id} item={item} onDelete={handleDelete} />
+          <PostCard key={item.id} item={item} onDelete={handleDelete} route={route}/>
         ))}
       </ScrollView>
     </SafeAreaView>

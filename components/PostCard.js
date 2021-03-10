@@ -30,7 +30,7 @@ import { AuthContext } from '../navigation/AuthProvider'
 import firestore from '@react-native-firebase/firestore'
 import Menu, { MenuItem } from 'react-native-material-menu'
 
-const PostCard = ({item, onDelete, onPress}) => {
+const PostCard = ({item, onDelete, onPress, route}) => {
   const { user, logout } = useContext(AuthContext)
   const [userData, setUserData] = useState(null)
   const windowWidth = Dimensions.get('window').width
@@ -51,7 +51,14 @@ const PostCard = ({item, onDelete, onPress}) => {
 
   /* post date */
   let date = new Date(0); // The 0 there is the key, which sets the date to the epoch
-  date.setUTCSeconds(item.postTime);
+  if(route.name == 'Profile') {
+    console.log('Profile ...')
+    date.setUTCSeconds(item.postTime.seconds);
+  } 
+  if(route.name == 'Social App') {
+    console.log('Social App ...')
+    date.setUTCSeconds(item.postTime);
+  } 
 
   /* like color */
   likeIcon = item.liked ? 'heart' : 'heart-outline'

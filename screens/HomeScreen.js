@@ -18,7 +18,7 @@ import storage from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'
 
 
-import {Container} from '../styles/FeedStyles'
+import { Container } from '../styles/FeedStyles'
 
 /* const Posts = [
   {
@@ -83,11 +83,12 @@ import {Container} from '../styles/FeedStyles'
   },
 ]; */
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [deleted, setDeleted] = useState(false)
-  const [postEditedText, setpostEditedText] = useState('')
+
+  console.log('route', route.name)
 
   const fetchPosts = async () => {
     try {
@@ -300,6 +301,7 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate('HomeProfile', {userId: item.userId})
                 }
+                route={route}
               />
             )}
             ListHeaderComponent={ListHeader}
