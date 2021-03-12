@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { View, Text, Dimensions, Animated, TextInput, Button } from 'react-native'
+import { View, Text, Dimensions, Keyboard, KeyboardAvoidingView, Animated, TextInput, Button, Platform } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {
   Card,
@@ -98,6 +98,7 @@ const PostCard = ({item, onDelete, onPress, route}) => {
   const onEdit = () => {
     setEditPostBox(!editPostBox)
     hideMenu()
+    Keyboard.dismiss()
   }
 
   const editPost = async() => {
@@ -130,6 +131,25 @@ const PostCard = ({item, onDelete, onPress, route}) => {
       })
   }
 
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow)
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide)
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow)
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide)
+    }
+  }, [])
+
+  const _keyboardDidShow = () => {
+    console.log("Keyboard Shown")
+  }
+
+  const _keyboardDidHide = () => {
+    console.log("Keyboard Hidden")
+  }
+
   return (
     <Animated.View
       style={{ opacity: fadeAnim  }} // Bind opacity to animated value
@@ -138,7 +158,6 @@ const PostCard = ({item, onDelete, onPress, route}) => {
       {/* Post Header */}
       <UserInfo>
         <UserInfoLeft>
-          {/* <UserImg source={{ uri: item.userImg }} /> */}
           <UserImg
             source={{
               uri: userData
@@ -195,6 +214,7 @@ const PostCard = ({item, onDelete, onPress, route}) => {
 
       {/* Posts data */}
       {editPostBox ? 
+      <KeyboardAvoidingView>
         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
           <TextInput 
             type="text" 
@@ -204,7 +224,7 @@ const PostCard = ({item, onDelete, onPress, route}) => {
             style={{ borderBottomWidth: 0, marginLeft: 10 }} 
           />
           {/* Buttons */}
-          <Animated.View style={{ opacity: fadeAnimBtn  }}>
+          
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               {/* Edit */}
               <View style={{ marginRight: 10 }}>
@@ -212,11 +232,12 @@ const PostCard = ({item, onDelete, onPress, route}) => {
               </View>
               {/* Button */}
               <View>
-                <Button title='cancel' onPress={onEdit }/>
+                <Button title='cancel' onPress={onEdit}/>
               </View>
             </View>
-          </Animated.View>
+          
         </View>
+        </KeyboardAvoidingView>
         :
         <PostText>{textPostEdited}</PostText>}
       

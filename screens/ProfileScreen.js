@@ -92,6 +92,11 @@ const ProfileScreen = ({navigation, route}) => {
     getUser()
     fetchPosts()
     navigation.addListener("focus", () => setLoading(!loading))
+
+    /* return () => {
+      cleanup
+    } */
+    
   }, [navigation, loading])
 
   const handleDelete = () => {

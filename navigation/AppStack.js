@@ -197,11 +197,7 @@ const AppStack = () => {
           // tabBarVisible: route.state && route.state.index === 0,
           tabBarLabel: 'Messages',
           tabBarIcon: ({color, size}) => (
-            <Ionicons
-              name="chatbox-ellipses-outline"
-              color={color}
-              size={size}
-            />
+            <Ionicons name="chatbox-ellipses-outline" color={color} size={size} />
           ),
         })}
       />
