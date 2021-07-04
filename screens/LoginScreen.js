@@ -18,6 +18,7 @@ const LoginScreen = ({ navigation }) => {
       <Image 
         source={require('../assets/rn-social-logo.png')}
         style={styles.logo}
+
       />
 
       <Text style={styles.text}>Social App</Text>

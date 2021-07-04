@@ -15,18 +15,19 @@ import firestore from '@react-native-firebase/firestore'
 import PostCard from '../components/PostCard'
 
 const ProfileScreen = ({navigation, route}) => {
-  const { user, logout } = useContext(AuthContext)
+  const { user, profileImgChanged, setProfileImgChanged, setUser, logout } = useContext(AuthContext)
   
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [deleted, setDeleted] = useState(false)
   const [userData, setUserData] = useState(null)
-
-  console.log('user', user.uid, route)
 
   const fetchPosts = async () => {
     try {
       const list = []
+
+      /* if(userData) {
+        setUserData(null)
+      } */
 
       await firestore()
         .collection('posts')
@@ -34,7 +35,7 @@ const ProfileScreen = ({navigation, route}) => {
         .orderBy('postTime', 'desc')
         .get()
         .then(querySnapshot => {
-          console.log('Total Posts: ', querySnapshot.size);
+          //console.log('fetch Posts size: ', querySnapshot.size);
 
           querySnapshot.forEach(doc => {
             const {
@@ -61,7 +62,7 @@ const ProfileScreen = ({navigation, route}) => {
           })
         })
 
-      console.log('list', list)
+      //console.log('list', list)
 
       setPosts(list)
 
@@ -69,7 +70,7 @@ const ProfileScreen = ({navigation, route}) => {
         setLoading(false)
       }
 
-      console.log('Posts: ', posts);
+      //console.log('Posts: ', posts);
     } catch (e) {
       console.log(e);
     }
@@ -82,7 +83,7 @@ const ProfileScreen = ({navigation, route}) => {
     .get()
     .then((documentSnapshot) => {
       if( documentSnapshot.exists ) {
-        console.log('User Data', documentSnapshot.data())
+        //console.log('User Data', documentSnapshot.data())
         setUserData(documentSnapshot.data())
       }
     })
@@ -92,11 +93,6 @@ const ProfileScreen = ({navigation, route}) => {
     getUser()
     fetchPosts()
     navigation.addListener("focus", () => setLoading(!loading))
-
-    /* return () => {
-      cleanup
-    } */
-    
   }, [navigation, loading])
 
   const handleDelete = () => {
@@ -118,10 +114,10 @@ const ProfileScreen = ({navigation, route}) => {
             }}
         />
         <Text style={styles.userName}>{userData ? userData.fname || 'Test' : 'Test'} {userData ? userData.lname || 'User' : 'User'}</Text>
-        <Text>{ route.params ? route.params.userId : user.uid }</Text>
+        {/* <Text>{ route.params ? route.params.userId : user.uid }</Text> */}
         {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
         <Text style={styles.aboutUser}>
-        {userData ? userData.about || 'No details added.' : ''}
+          {userData ? userData.about || 'No details added.' : ''}
         </Text>
         <View style={styles.userBtnWrapper}>
           {route.params ? (
@@ -147,6 +143,7 @@ const ProfileScreen = ({navigation, route}) => {
           )}
         </View>
 
+        {/* Posts - Followers - Following */}
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
             <Text style={styles.userInfoTitle}>{posts.length}</Text>
@@ -162,8 +159,9 @@ const ProfileScreen = ({navigation, route}) => {
           </View>
         </View>
 
+        {/* cards */}
         {posts.map((item) => (
-          <PostCard key={item.id} item={item} onDelete={handleDelete} route={route}/>
+          <PostCard key={item.id} item={item} onDelete={handleDelete} route={route} newUserData={userData}/>
         ))}
       </ScrollView>
     </SafeAreaView>

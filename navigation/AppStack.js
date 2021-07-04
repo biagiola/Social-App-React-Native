@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, TouchableOpacity, Text} from 'react-native'
+import { View, Platform, KeyboardAvoidingView, Button } from 'react-native'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'

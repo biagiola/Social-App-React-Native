@@ -7,8 +7,11 @@ import {
   FlatList,
   SafeAreaView,
   Alert,
-  ToastAndroid
+  ToastAndroid,
+  TextInput, Button, Keyboard, KeyboardAvoidingView, Platform
 } from 'react-native'
+
+import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -87,6 +90,10 @@ const HomeScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [deleted, setDeleted] = useState(false)
+
+  const [editPostBox, setEditPostBox] = useState(false)
+  const [enableShift, setEnableShift] = useState(false)
+  const [textPostEdited, setTextPostEdited] = useState('Hola que tal')
 
   console.log('route', route.name)
 
@@ -239,6 +246,41 @@ const HomeScreen = ({ navigation, route }) => {
 
   const ListHeader = () => {
     return null
+  }
+
+  const onEdit = () => {
+    Keyboard.dismiss()
+    setEditPostBox(!editPostBox)
+    hideMenu()
+  }
+
+  const editPost = async () => {
+    try {
+      await firestore()
+        .collection('posts')
+        .doc(item.id)
+        .update({
+          post: textPostEdited,
+        })
+
+      setEditPostBox(!editPostBox)
+      console.log('Update success!', textPostEdited)
+
+    } catch (error) {
+      console.log('Error', error)
+    }
+  }
+
+  /* menu stuffs */
+  let menu = null
+  const setMenuRef = ref => {
+    menu = ref
+  }
+  const hideMenu = () => {
+    menu.hide()
+  }
+  const showMenu = () => {
+    menu.show()
   }
 
   return (

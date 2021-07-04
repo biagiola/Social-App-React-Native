@@ -25,7 +25,7 @@ import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 
 const EditProfileScreen = () => {
-  const {user, logout} = useContext(AuthContext)
+  const {user, setProfileImgChanged, logout} = useContext(AuthContext)
   const [image, setImage] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [transferred, setTransferred] = useState(0)
@@ -38,8 +38,9 @@ const EditProfileScreen = () => {
     .get()
     .then((documentSnapshot) => {
       if( documentSnapshot.exists ) {
-        console.log('User Data', documentSnapshot.data())
+        //console.log('User Data', documentSnapshot.data())
         setUserData(documentSnapshot.data())
+        
       }
     })
   }
@@ -69,6 +70,7 @@ const EditProfileScreen = () => {
         'Profile Updated!',
         'Your profile has been updated successfully.'
       )
+      setProfileImgChanged(true)
     })
   }
 
@@ -92,9 +94,9 @@ const EditProfileScreen = () => {
 
     // Set transferred state
     task.on('state_changed', (taskSnapshot) => {
-      console.log(
+      /* console.log(
         `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
-      )
+      ) */
 
       setTransferred(
         Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
